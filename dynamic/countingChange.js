@@ -1,15 +1,18 @@
-const countingChange = (amount, coins) => {
-    // todo
-    console.log(coins.length)
-    let count = 0
-    if (amount === 0) return 1
-    if (amount <0) return 0
-    for (let i=0;i<coins.length;i+=1){
-        console.log(amount,i)
-        count = count + countingChange(amount-coins[i],coins)
+const countingChange = (amount, coins, i = 0, memo = {}) => {
+    const key = amount + ',' + i;
+    if (key in memo) return memo[key];
+    
+    if (amount === 0) return 1;
+    if (i === coins.length) return 0;
+      
+    const coin = coins[i];
+    
+    let count = 0;
+    for (let qty = 0; (qty * coin) <= amount; qty += 1) {
+      const remainder = amount - (coin * qty);
+      count += countingChange(remainder, coins, i + 1, memo);
     }
-    return count
+    
+    memo[key] = count;
+    return count;
   };
-
-x = countingChange(8, [1, 2, 3]);
-console.log(x)
